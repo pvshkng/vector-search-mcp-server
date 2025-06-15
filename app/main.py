@@ -7,7 +7,7 @@ from typing import Annotated
 
 key_pair = RSAKeyPair.generate()
 
-mcp = FastMCP(name="Vector_Search_MCP_Server", port=8000)
+mcp = FastMCP(name="Vector_Search_MCP_Server")
 
 # description="Search for documents using vector embeddings"
 
@@ -48,6 +48,3 @@ async def vector_search(
         for hits in results
         for hit in hits
     ]
-
-if __name__ == "__main__":
-    mcp.run(transport="sse")
