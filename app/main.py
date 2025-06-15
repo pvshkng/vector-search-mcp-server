@@ -1,35 +1,40 @@
-from fastmcp import FastMCP
+from fastmcp import FastMCP, Context
 from fastmcp.server.auth import BearerAuthProvider
 from fastmcp.server.auth.providers.bearer import RSAKeyPair
 from app.core.embeddings import embedding_service
 from app.core.vector_store import vector_store
-from fastmcp.server.dependencies import get_access_token, AccessToken
+from typing import Annotated
 
 key_pair = RSAKeyPair.generate()
 
-auth = BearerAuthProvider(
-    public_key=key_pair.public_key,
-    issuer="https://dev.example.com",
-    audience="vector-search-mcp"
-)
-mcp = FastMCP(name="Vector_Search_MCP_Server", port=8000, auth=auth)
+mcp = FastMCP(name="Vector_Search_MCP_Server", port=8000)
 
-dev_token = key_pair.create_token(
-    subject="dev-user",
-    issuer="https://dev.example.com",
-    audience="vector-search-mcp",
-    scopes=["search:read"]
-)
+# description="Search for documents using vector embeddings"
 
-# print(f"Use this token for authentication: {dev_token}")
 
-@mcp.tool
-async def vector_search(query: str):
-    
-    # access_token: AccessToken = get_access_token()
-    # user_id = access_token.client_id  
-    # user_scopes = access_token.scopes
+@mcp.tool(name="vector_search")
+async def vector_search(
+    query: Annotated[
+        str,
+        "User's natural language question about Text2SQL research. The query will be enhanced to focus on technical and academic aspects before being converted to embeddings for vector search."
+    ],
+    ctx: Context = Context(),
+):
+    """Search and retrieve relevant chunks from academic papers about Text2SQL technology and research.
 
+    This tool performs semantic search on a collection of Text2SQL research papers. It enhances the input query
+    to focus on technical aspects of converting natural language to SQL queries, such as:
+    - Neural architectures for Text2SQL
+    - Schema linking and database context understanding
+    - SQL query generation techniques
+    - Evaluation methodologies and benchmarks
+    - Error handling and query optimization
+
+    Example queries:
+        - "What are the latest approaches for handling complex joins in Text2SQL?"
+        - "How do Text2SQL models handle schema understanding?"
+        - "Best practices for evaluating Text2SQL models
+    """
 
     query_embedding = embedding_service.encode(query)
     results = await vector_store.search(query_embedding)
