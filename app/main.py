@@ -18,7 +18,7 @@ async def vector_search(
         str,
         "User's natural language question about Text2SQL research. The query will be enhanced to focus on technical and academic aspects before being converted to embeddings for vector search."
     ],
-    ctx: Context = Context(),
+    ctx: Context,
 ):
     """Search and retrieve relevant chunks from academic papers about Text2SQL technology and research.
 
