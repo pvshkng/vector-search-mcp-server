@@ -4,6 +4,7 @@ from fastmcp.server.auth import BearerAuthProvider
 from fastmcp.server.auth.providers.bearer import RSAKeyPair
 from app.core.embeddings import embedding_service
 from app.core.vector_store import vector_store
+from app.core.logging import log_request_details
 from typing import Annotated
 
 key_pair = RSAKeyPair.generate()
@@ -11,14 +12,12 @@ key_pair = RSAKeyPair.generate()
 port = int(os.getenv("PORT", "8000"))
 mcp = FastMCP(name="Vector_Search_MCP_Server", host="0.0.0.0", port=port)
 
-# description="Search for documents using vector embeddings"
-
 
 @mcp.tool(name="vector_search")
 async def vector_search(
     query: Annotated[
         str,
-        "User's natural language question about Text2SQL research. The query will be enhanced to focus on technical and academic aspects before being converted to embeddings for vector search."
+        "User's natural language question about Text2SQL research. The query will be enhanced to focus on technical and academic aspects before being converted to embeddings for vector search.",
     ],
     ctx: Context,
 ):
@@ -37,6 +36,7 @@ async def vector_search(
         - "How do Text2SQL models handle schema understanding?"
         - "Best practices for evaluating Text2SQL models
     """
+    await log_request_details(ctx)
 
     query_embedding = embedding_service.encode(query)
     results = await vector_store.search(query_embedding)
