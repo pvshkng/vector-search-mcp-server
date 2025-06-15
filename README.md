@@ -1,5 +1,4 @@
 # Vector Search MCP Server
-
 A FastMCP server integrated with Milvus Cloud and Google's Gemini embeddings.
 
 ## Prerequisites
