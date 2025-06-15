@@ -1,3 +1,4 @@
+import os
 from fastmcp import FastMCP, Context
 from fastmcp.server.auth import BearerAuthProvider
 from fastmcp.server.auth.providers.bearer import RSAKeyPair
@@ -7,7 +8,8 @@ from typing import Annotated
 
 key_pair = RSAKeyPair.generate()
 
-mcp = FastMCP(name="Vector_Search_MCP_Server", host="0.0.0.0", port=8000)
+port = int(os.getenv("PORT", "10000"))
+mcp = FastMCP(name="Vector_Search_MCP_Server", host="0.0.0.0", port=port)
 
 # description="Search for documents using vector embeddings"
 
