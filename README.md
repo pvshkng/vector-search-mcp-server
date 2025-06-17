@@ -27,5 +27,9 @@ A FastMCP server integrated with Milvus Cloud and Google's Gemini embeddings.
 6. Run ```fastmcp run --transport sse --port 8001 app/main.py``` to start the MCP server
 7. (Optional) run ```fastmcp dev ./app/main.py``` to start the MCP Inspector for debug
 
+## Running with Docker
+1. Build the image: ```docker build -t llm-client-backend .```
+2. Run: ```docker run -p 8000:8000 --env-file .env llm-client-backend```
+
 ## Other commands
 - Exporting requirements.txt for deploying on the environment where uv is unavailable: ```uv pip freeze > requirements.txt```
